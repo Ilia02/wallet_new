@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "705238699899",
+    "project_id": "coinwallet-ab41c",
+    "storage_bucket": "coinwallet-ab41c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705238699899:android:0faed200ffb8463e7fb7de",
+        "android_client_info": {
+          "package_name": "coinwallet.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8hmy7Fq7KlcUxnegSkkoTr4XlvMrPQiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705238699899:android:84aa80e1088c5ddb7fb7de",
+        "android_client_info": {
+          "package_name": "com.example.wallet_new"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8hmy7Fq7KlcUxnegSkkoTr4XlvMrPQiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
