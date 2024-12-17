@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:wallet_new/core/error/exception.dart';
 import 'package:wallet_new/core/error/failure.dart';
 import 'package:wallet_new/features/data/datasources/bybit_remote_datasource.dart';
+import 'package:wallet_new/features/domain/entities/account_bybit_entities/account_bybit_entity.dart';
 import 'package:wallet_new/features/domain/entities/coin_entity.dart';
 import 'package:wallet_new/features/domain/entities/user_entity.dart';
 import 'package:wallet_new/features/domain/repositories/bybit_repository.dart';
@@ -32,7 +33,7 @@ class BybitRepositoryImpl implements BybitRepository {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> bybitAuth(
+  Future<Either<Failure, AccountBybitEntity>> bybitAuth(
       String apiKey, String apiSecret, UserEntity user) async {
     return _handleRequest(
         () => bybitRemoteDatasource.bybitAuth(apiKey, apiSecret, user));

@@ -3,30 +3,29 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:wallet_new/features/data/models/account_bybit_models/account_bybit_model.dart';
 import 'package:wallet_new/features/data/models/coin_model.dart';
+import 'package:wallet_new/features/domain/entities/account_bybit_entities/account_bybit_entity.dart';
 import 'package:wallet_new/features/domain/entities/coin_entity.dart';
 import 'package:wallet_new/features/domain/entities/user_entity.dart';
 
 abstract class BybitRemoteDatasource {
   Future<List<CoinEntity>> getAllCoins();
   Future<CoinEntity> getCoin(String name);
-  Future<UserEntity> bybitAuth(
+  Future<AccountBybitEntity> bybitAuth(
       String apiKey, String apiSecret, UserEntity user);
 }
 
 class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
-  final String apiKey;
   final Dio dio = Dio();
-  final String baseUrl;
+  static const String baseUrlDefault = 'https://api.bybit.com';
+  static const String apiKeyDefault = 'hXzxaO47eJDWGuP4yJ';
+  static const String apiSecretDefault = 'qwerty';
 
-  BybitRemoteDatasourceImpl({
-    this.apiKey = 'hXzxaO47eJDWGuP4yJ',
-    this.baseUrl = 'https://api.bybit.com',
-  });
+  BybitRemoteDatasourceImpl();
 
   /// Получение всех монет
   @override
   Future<List<CoinModel>> getAllCoins() async {
-    final param = {'category': 'spot', 'apikey': apiKey ?? this.apiKey};
+    final param = {'category': 'spot', 'apikey': apiKeyDefault};
 
     final response = await _makeRequest('/v5/market/tickers', param);
     return (response["result"] as List)
@@ -37,7 +36,7 @@ class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
   /// Получение конкретной монеты по имени
   @override
   Future<CoinModel> getCoin(String name) async {
-    final param = {'category': 'spot', 'apikey': apiKey ?? this.apiKey};
+    final param = {'category': 'spot', 'apikey': apiKeyDefault};
 
     final response = await _makeRequest('/v5/market/tickers', param);
     final coinData = (response["result"]["list"] as List)
@@ -82,7 +81,7 @@ class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
 
     try {
       final response =
-          await dio.get('$baseUrl$endpoint', queryParameters: params);
+          await dio.get('$baseUrlDefault$endpoint', queryParameters: params);
 
       if (response.statusCode == 200) {
         return response.data;
@@ -99,7 +98,7 @@ class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
     final sortedKeys = params.keys.toList()..sort();
     final queryString =
         sortedKeys.map((key) => '$key=${params[key]}').join('&');
-    final hmac = Hmac(sha256, utf8.encode(apiSecret));
+    final hmac = Hmac(sha256, utf8.encode(apiSecretDefault));
     final digest = hmac.convert(utf8.encode(queryString));
     return digest.toString();
   }

@@ -10,8 +10,13 @@ sealed class BybitAuthEvent extends Equatable {
 class BybitSignInEvent extends BybitAuthEvent {
   final String apiKey;
   final String apiSecret;
+  final UserEntity user;
 
-  const BybitSignInEvent(this.apiKey, this.apiSecret);
+  const BybitSignInEvent(this.apiKey, this.apiSecret, this.user);
 }
 
-class BybitSignOutEvent extends BybitAuthEvent {}
+class BybitSignOutEvent extends BybitAuthEvent {
+  final UserEntity user;
+
+  const BybitSignOutEvent({required this.user});
+}

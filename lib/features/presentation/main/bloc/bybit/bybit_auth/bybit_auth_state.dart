@@ -18,11 +18,20 @@ final class BybitAuthLoading extends BybitAuthState {
 }
 
 final class BybitAuthLoggedIn extends BybitAuthState {
+  final AccountBybitEntity account;
+
+  BybitAuthLoggedIn({required this.account});
+
+  @override
+  List<Object> get props => [account];
+}
+
+final class BybitAuthLoggedOut extends BybitAuthState {
   @override
   List<Object> get props => [];
 }
 
-final class BybitAuthLoggedOut extends BybitAuthState {
+final class BybitAuthError extends BybitAuthState {
   @override
   List<Object> get props => [];
 }
