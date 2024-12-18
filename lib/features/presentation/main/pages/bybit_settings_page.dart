@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wallet_new/features/presentation/main/bloc/bybit/bybit_auth/bybit_auth_bloc.dart';
 import 'package:wallet_new/features/presentation/main/widgets/arrow_back_widget.dart';
 
 class BybitSettingsPage extends StatefulWidget {
@@ -46,11 +48,10 @@ class _BybitSettingsPageState extends State<BybitSettingsPage> {
                 String apiKey = apiKeyController.text;
                 String apiSecret = apiSecretController.text;
                 print('API Key: $apiKey, API Secret: $apiSecret');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Ключи сохранены!')),
-                );
+
+                context.read<BybitAuthBloc>().add(BybitSignInEvent(apiKey, apiSecret, user));
               },
-              child: const Text('Сохранить'),
+              child: const Text("Сохранить"),
             ),
           ],
         ),

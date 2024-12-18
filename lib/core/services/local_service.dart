@@ -17,9 +17,12 @@ import 'package:wallet_new/features/domain/usecases/auth_usecases/login_with_goo
 import 'package:wallet_new/features/domain/usecases/auth_usecases/logout.dart';
 import 'package:wallet_new/features/domain/usecases/auth_usecases/register_with_email.dart';
 import 'package:wallet_new/features/domain/usecases/auth_usecases/reset_password.dart';
+import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_auth.dart';
+import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_logout.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/get_all_coins.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/get_coin.dart';
 import 'package:wallet_new/features/presentation/bloc/auth/auth_bloc.dart';
+import 'package:wallet_new/features/presentation/main/bloc/bybit/bybit_auth/bybit_auth_bloc.dart';
 import 'package:wallet_new/features/presentation/main/bloc/bybit/get_coin/get_coin_bybit_cubit.dart';
 
 final sl = GetIt.instance;
@@ -30,17 +33,26 @@ Future<void> init() async {
   var walletsBox = await Hive.openBox<LocalWallet>('walletsBox');
 
   //Bloc / Cubit
-  sl.registerFactory(() => AuthBloc(
-        logInWithEmailAndPassword: sl(),
-        logOut: sl(),
-        logInWithGoogle: sl(),
-        registerWithEmail: sl(),
-        resetPassword: sl(),
-        getCachedUser: sl(),
-      ));
+  sl.registerFactory(
+    () => AuthBloc(
+      logInWithEmailAndPassword: sl(),
+      logOut: sl(),
+      logInWithGoogle: sl(),
+      registerWithEmail: sl(),
+      resetPassword: sl(),
+      getCachedUser: sl(),
+    ),
+  );
 
   sl.registerFactory(() => ThemeCubit());
   sl.registerFactory(() => GetCoinBybitCubit(coin: sl()));
+
+  sl.registerFactory(
+    () => BybitAuthBloc(
+      bybitAuth: sl(),
+      bybitLogout: sl(),
+    ),
+  );
 
   //UseCases /Auth
   sl.registerLazySingleton(() => GetCachedUser(sl()));
@@ -53,20 +65,34 @@ Future<void> init() async {
   //UseCases /Bybit
   sl.registerLazySingleton(() => GetAllCoins(sl()));
   sl.registerLazySingleton(() => GetCoin(sl()));
+  sl.registerLazySingleton(() => BybitAuth(sl()));
+  sl.registerLazySingleton(() => BybitLogout(sl()));
 
   //Repository /Auth
   sl.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(sl(), sl()));
+    () => AuthRepositoryImpl(
+      sl(),
+      sl(),
+    ),
+  );
 
   sl.registerLazySingleton<FirebaseAuthRemoteDataSource>(
-      () => FirebaseAuthRemoteDataSourceImpl(sl(), sl()));
+    () => FirebaseAuthRemoteDataSourceImpl(
+      sl(),
+      sl(),
+    ),
+  );
 
   //Repository /Bybit
   sl.registerLazySingleton<BybitRepository>(
-      () => BybitRepositoryImpl(bybitRemoteDatasource: sl()));
+    () => BybitRepositoryImpl(
+      bybitRemoteDatasource: sl(),
+    ),
+  );
 
   sl.registerLazySingleton<BybitRemoteDatasource>(
-      () => BybitRemoteDatasourceImpl());
+    () => BybitRemoteDatasourceImpl(),
+  );
 
   //Core
   sl.registerLazySingleton<NetworkInfo>(

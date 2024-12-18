@@ -20,8 +20,11 @@ import 'package:wallet_new/features/domain/usecases/auth_usecases/login_with_goo
 import 'package:wallet_new/features/domain/usecases/auth_usecases/logout.dart';
 import 'package:wallet_new/features/domain/usecases/auth_usecases/register_with_email.dart';
 import 'package:wallet_new/features/domain/usecases/auth_usecases/reset_password.dart';
+import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_auth.dart';
+import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_logout.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/get_coin.dart';
 import 'package:wallet_new/features/presentation/bloc/auth/auth_bloc.dart';
+import 'package:wallet_new/features/presentation/main/bloc/bybit/bybit_auth/bybit_auth_bloc.dart';
 import 'package:wallet_new/features/presentation/main/bloc/bybit/get_coin/get_coin_bybit_cubit.dart';
 import 'package:wallet_new/firebase_options.dart';
 
@@ -35,8 +38,6 @@ Future<void> main() async {
   Hive.registerAdapter(LocalWalletAdapter());
 
   await di.init();
-  assert(sl.isRegistered<BybitRemoteDatasource>());
-  assert(sl.isRegistered<BybitRepository>());
 
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getTemporaryDirectory(),
@@ -55,6 +56,12 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider<BybitAuthBloc>(
+          create: (context) => BybitAuthBloc(
+            bybitAuth: sl<BybitAuth>(),
+            bybitLogout: sl<BybitLogout>(),
+          ),
+        ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(
             logInWithEmailAndPassword: sl<LogInWithEmailAndPassword>(),
