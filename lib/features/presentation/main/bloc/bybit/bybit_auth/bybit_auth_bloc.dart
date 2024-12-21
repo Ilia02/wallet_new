@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:wallet_new/core/usecases/usecase.dart';
 import 'package:wallet_new/features/domain/entities/account_bybit_entities/account_bybit_entity.dart';
-import 'package:wallet_new/features/domain/entities/user_entity.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_auth.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_logout.dart';
 
@@ -21,8 +21,8 @@ class BybitAuthBloc extends HydratedBloc<BybitAuthEvent, BybitAuthState> {
 
   Future<void> _onBybitSignInEvent(
       BybitSignInEvent event, Emitter<BybitAuthState> state) async {
-    final result = await bybitAuth(BybitAuthParams(
-        apiKey: event.apiKey, apiSecret: event.apiSecret, user: event.user));
+    final result = await bybitAuth(
+        BybitAuthParams(apiKey: event.apiKey, apiSecret: event.apiSecret));
 
     emit(result.fold((failure) => BybitAuthError(),
         (value) => BybitAuthLoggedIn(account: value)));
@@ -30,7 +30,7 @@ class BybitAuthBloc extends HydratedBloc<BybitAuthEvent, BybitAuthState> {
 
   Future<void> _onBybitSignOutEvent(
       BybitSignOutEvent event, Emitter<BybitAuthState> state) async {
-    final result = await bybitLogout(BybitLogoutParams(user: event.user));
+    final result = await bybitLogout(NoParams());
   }
 
   @override

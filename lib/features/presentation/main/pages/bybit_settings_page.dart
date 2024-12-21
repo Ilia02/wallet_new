@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wallet_new/features/presentation/main/bloc/bybit/bybit_auth/bybit_auth_bloc.dart';
 import 'package:wallet_new/features/presentation/main/widgets/arrow_back_widget.dart';
 
@@ -42,17 +43,33 @@ class _BybitSettingsPageState extends State<BybitSettingsPage> {
               ),
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                // Логика сохранения ключей
-                String apiKey = apiKeyController.text;
-                String apiSecret = apiSecretController.text;
-                print('API Key: $apiKey, API Secret: $apiSecret');
+            BlocBuilder<BybitAuthBloc, BybitAuthState>(
+                builder: (context, state) {
+              if (state is BybitAuthInitial) {
+                return ElevatedButton(
+                  onPressed: () {
+                    // Логика сохранения ключей
+                    String apiKey = apiKeyController.text;
+                    String apiSecret = apiSecretController.text;
+                    print('API Key: $apiKey, API Secret: $apiSecret');
 
-                context.read<BybitAuthBloc>().add(BybitSignInEvent(apiKey, apiSecret, user));
-              },
-              child: const Text("Сохранить"),
-            ),
+                    context
+                        .read<BybitAuthBloc>()
+                        .add(BybitSignInEvent(apiKey, apiSecret));
+                  },
+                  child: const Text("Сохранить"),
+                );
+              } else if (state is BybitAuthLoading) {
+                return ElevatedButton(
+                  onPressed: () {},
+                  child: const CircularProgressIndicator(),
+                );
+              } else if (state is BybitAuthLoggedIn) {
+                context.go("/settings");
+              } else {
+                context.read<BybitAuthBloc>().add(BybitSignInEvent());
+              }
+            }),
           ],
         ),
       ),

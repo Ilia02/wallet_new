@@ -13,16 +13,13 @@ class BybitAuth implements UseCase<AccountBybitEntity, BybitAuthParams> {
   @override
   Future<Either<Failure, AccountBybitEntity>> call(
       BybitAuthParams params) async {
-    return await bybitRepository.bybitAuth(
-        params.apiKey, params.apiSecret, params.user);
+    return await bybitRepository.bybitAuth(params.apiKey, params.apiSecret);
   }
 }
 
 class BybitAuthParams {
   String apiKey;
   String apiSecret;
-  UserEntity user;
 
-  BybitAuthParams(
-      {required this.apiKey, required this.apiSecret, required this.user});
+  BybitAuthParams({required this.apiKey, required this.apiSecret});
 }

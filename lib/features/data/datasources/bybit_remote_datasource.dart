@@ -10,8 +10,7 @@ import 'package:wallet_new/features/domain/entities/user_entity.dart';
 abstract class BybitRemoteDatasource {
   Future<List<CoinEntity>> getAllCoins();
   Future<CoinEntity> getCoin(String name);
-  Future<AccountBybitEntity> bybitAuth(
-      String apiKey, String apiSecret, UserEntity user);
+  Future<AccountBybitEntity> bybitAuth(String apiKey, String apiSecret);
 }
 
 class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
@@ -48,8 +47,7 @@ class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
   }
 
   @override
-  Future<AccountBybitModel> bybitAuth(
-      String apiKey, String apiSecret, UserEntity user) async {
+  Future<AccountBybitModel> bybitAuth(String apiKey, String apiSecret) async {
     final param = {
       'accountType': "UNIFIED",
       'apiKey': apiKey,

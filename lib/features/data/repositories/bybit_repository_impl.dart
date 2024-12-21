@@ -4,7 +4,6 @@ import 'package:wallet_new/core/error/failure.dart';
 import 'package:wallet_new/features/data/datasources/bybit_remote_datasource.dart';
 import 'package:wallet_new/features/domain/entities/account_bybit_entities/account_bybit_entity.dart';
 import 'package:wallet_new/features/domain/entities/coin_entity.dart';
-import 'package:wallet_new/features/domain/entities/user_entity.dart';
 import 'package:wallet_new/features/domain/repositories/bybit_repository.dart';
 
 class BybitRepositoryImpl implements BybitRepository {
@@ -34,13 +33,13 @@ class BybitRepositoryImpl implements BybitRepository {
 
   @override
   Future<Either<Failure, AccountBybitEntity>> bybitAuth(
-      String apiKey, String apiSecret, UserEntity user) async {
+      String apiKey, String apiSecret) async {
     return _handleRequest(
-        () => bybitRemoteDatasource.bybitAuth(apiKey, apiSecret, user));
+        () => bybitRemoteDatasource.bybitAuth(apiKey, apiSecret));
   }
 
   @override
-  Future<Either<Failure, void>> bybitLogout(UserEntity user) {
+  Future<Either<Failure, void>> bybitLogout() {
     // TODO: implement bybitLogout
     throw UnimplementedError();
   }
