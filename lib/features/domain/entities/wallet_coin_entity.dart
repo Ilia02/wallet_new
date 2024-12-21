@@ -8,6 +8,8 @@ class WalletCoinEntity extends Equatable {
   @HiveField(0)
   final String name;
 
+  
+
   @HiveField(1)
   double count;
 

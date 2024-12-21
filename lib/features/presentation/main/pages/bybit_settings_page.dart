@@ -66,9 +66,7 @@ class _BybitSettingsPageState extends State<BybitSettingsPage> {
                 );
               } else if (state is BybitAuthLoggedIn) {
                 context.go("/settings");
-              } else {
-                context.read<BybitAuthBloc>().add(BybitSignInEvent());
-              }
+              } else {}
             }),
           ],
         ),
