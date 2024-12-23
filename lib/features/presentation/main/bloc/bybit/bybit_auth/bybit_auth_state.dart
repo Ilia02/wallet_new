@@ -18,12 +18,12 @@ final class BybitAuthLoading extends BybitAuthState {
 }
 
 final class BybitAuthLoggedIn extends BybitAuthState {
-  final AccountBybitEntity account;
+  final BybitApiEntity api;
 
-  BybitAuthLoggedIn({required this.account});
+  BybitAuthLoggedIn({required this.api});
 
   @override
-  List<Object> get props => [account];
+  List<Object> get props => [api];
 }
 
 final class BybitAuthLoggedOut extends BybitAuthState {

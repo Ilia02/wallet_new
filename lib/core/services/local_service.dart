@@ -1,13 +1,17 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:hive/hive.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:wallet_new/core/platform/network_info.dart';
 import 'package:wallet_new/core/services/theme_cubit.dart';
 import 'package:wallet_new/features/data/datasources/bybit_remote_datasource.dart';
 import 'package:wallet_new/features/data/datasources/firebase_auth_remote_datasource.dart';
 import 'package:wallet_new/features/data/repositories/auth_repository_impl.dart';
 import 'package:wallet_new/features/data/repositories/bybit_repository_impl.dart';
+import 'package:wallet_new/features/domain/entities/bybit_api_entity.dart';
 import 'package:wallet_new/features/domain/entities/user_entity.dart';
+import 'package:wallet_new/features/domain/entities/wallet_coin_entity.dart';
 import 'package:wallet_new/features/domain/entities/wallet_entity.dart';
 import 'package:wallet_new/features/domain/repositories/auth_repository.dart';
 import 'package:wallet_new/features/domain/repositories/bybit_repository.dart';
@@ -24,13 +28,19 @@ import 'package:wallet_new/features/domain/usecases/bybit_usecases/get_coin.dart
 import 'package:wallet_new/features/presentation/bloc/auth/auth_bloc.dart';
 import 'package:wallet_new/features/presentation/main/bloc/bybit/bybit_auth/bybit_auth_bloc.dart';
 import 'package:wallet_new/features/presentation/main/bloc/bybit/get_coin/get_coin_bybit_cubit.dart';
+import 'package:wallet_new/firebase_options.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  //Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   //Hive
-  var userBox = await Hive.openBox<UserEntity>('usersBox');
-  var walletsBox = await Hive.openBox<LocalWallet>('walletsBox');
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserEntityAdapter());
+  Hive.registerAdapter(WalletCoinEntityAdapter());
+  Hive.registerAdapter(LocalWalletAdapter());
 
   //Bloc / Cubit
   sl.registerFactory(
@@ -70,10 +80,7 @@ Future<void> init() async {
 
   //Repository /Auth
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(
-      sl(),
-      sl(),
-    ),
+    () => AuthRepositoryImpl(sl()),
   );
 
   sl.registerLazySingleton<FirebaseAuthRemoteDataSource>(

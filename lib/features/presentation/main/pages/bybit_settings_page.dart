@@ -51,11 +51,16 @@ class _BybitSettingsPageState extends State<BybitSettingsPage> {
                     // Логика сохранения ключей
                     String apiKey = apiKeyController.text;
                     String apiSecret = apiSecretController.text;
-                    print('API Key: $apiKey, API Secret: $apiSecret');
 
-                    context
-                        .read<BybitAuthBloc>()
-                        .add(BybitSignInEvent(apiKey, apiSecret));
+                    if (apiKey != "" && apiSecret != "") {
+                      print('API Key: $apiKey, API Secret: $apiSecret');
+
+                      context.read<BybitAuthBloc>().add(
+                            BybitSignInEvent(apiKey, apiSecret),
+                          );
+                    } else {
+                      const SnackBar(content: Text("Не заполнены данные"));
+                    }
                   },
                   child: const Text("Сохранить"),
                 );
@@ -66,7 +71,10 @@ class _BybitSettingsPageState extends State<BybitSettingsPage> {
                 );
               } else if (state is BybitAuthLoggedIn) {
                 context.go("/settings");
-              } else {}
+                return const SnackBar(content: Text("Хорошо"));
+              } else {
+                return const SnackBar(content: Text("Ошибка"));
+              }
             }),
           ],
         ),

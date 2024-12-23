@@ -7,9 +7,9 @@ import 'package:wallet_new/features/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final FirebaseAuthRemoteDataSource remoteDataSource;
-  final Box<UserEntity> userBox; // Хранилище для кэширования пользователя
+  final Box<UserEntity> _userBox; // Хранилище для кэширования пользователя
 
-  AuthRepositoryImpl(this.remoteDataSource, this.userBox);
+  AuthRepositoryImpl(this.remoteDataSource) : _userBox = Hive.box('userBox');
 
   @override
   Future<Either<Failure, UserEntity>> logInWithEmailAndPassword(
@@ -72,7 +72,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, UserEntity>> getCachedUser() async {
     try {
-      final user = userBox.get('cachedUser');
+      final user = _userBox.get('cachedUser');
       if (user != null) {
         return Right(user);
       }
@@ -84,11 +84,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
   // Кэшируем пользователя
   Future<void> _cacheUser(UserEntity user) async {
-    await userBox.put('cachedUser', user);
+    await _userBox.put('cachedUser', user);
   }
 
   // Очищаем кэш
   Future<void> _clearCache() async {
-    await userBox.delete('cachedUser');
+    await _userBox.delete('cachedUser');
   }
 }

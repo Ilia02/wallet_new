@@ -2,15 +2,16 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:wallet_new/features/data/models/account_bybit_models/account_bybit_model.dart';
+import 'package:wallet_new/features/data/models/account_bybit_models/bybit_api.dart';
 import 'package:wallet_new/features/data/models/coin_model.dart';
 import 'package:wallet_new/features/domain/entities/account_bybit_entities/account_bybit_entity.dart';
+import 'package:wallet_new/features/domain/entities/bybit_api_entity.dart';
 import 'package:wallet_new/features/domain/entities/coin_entity.dart';
-import 'package:wallet_new/features/domain/entities/user_entity.dart';
 
 abstract class BybitRemoteDatasource {
   Future<List<CoinEntity>> getAllCoins();
   Future<CoinEntity> getCoin(String name);
-  Future<AccountBybitEntity> bybitAuth(String apiKey, String apiSecret);
+  Future<BybitApiEntity> bybitAuth(String apiKey, String apiSecret);
 }
 
 class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
@@ -47,7 +48,8 @@ class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
   }
 
   @override
-  Future<AccountBybitModel> bybitAuth(String apiKey, String apiSecret) async {
+  Future<AccountBybitEntity> bybitGetWallet(
+      String apiKey, String apiSecret) async {
     final param = {
       'accountType': "UNIFIED",
       'apiKey': apiKey,
@@ -59,6 +61,21 @@ class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
     final accountData = (response["result"]["list"] as List)
         .map((item) => AccountBybitModel.fromJson(item))
         .toList();
+
+    if (accountData == null) {
+      throw Exception('Error: Account not found');
+    } else {
+      return accountData.first;
+    }
+  }
+
+  @override
+  Future<BybitApiModel> bybitAuth(String apiKey, String apiSecret) async {
+    final param = {'apiKey': apiKey, 'apiSecret': apiSecret};
+
+    final response = await _makeRequest('/v5/user/query-api', param);
+
+    final accountData = (response["result"]["list"] as List?);
 
     if (accountData == null) {
       throw Exception('Error: Account not found');
