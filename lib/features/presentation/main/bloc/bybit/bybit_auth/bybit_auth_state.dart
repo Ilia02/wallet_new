@@ -1,6 +1,6 @@
 part of 'bybit_auth_bloc.dart';
 
-sealed class BybitAuthState extends Equatable {
+abstract class BybitAuthState extends Equatable {
   const BybitAuthState();
 
   @override

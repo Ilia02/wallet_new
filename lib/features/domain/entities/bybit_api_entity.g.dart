@@ -8,7 +8,7 @@ part of 'bybit_api_entity.dart';
 
 class BybitApiEntityAdapter extends TypeAdapter<BybitApiEntity> {
   @override
-  final int typeId = 3;
+  final int typeId = 1;
 
   @override
   BybitApiEntity read(BinaryReader reader) {
@@ -17,8 +17,8 @@ class BybitApiEntityAdapter extends TypeAdapter<BybitApiEntity> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return BybitApiEntity(
-      apiKey: fields[0] as String?,
-      apiSecret: fields[1] as String?,
+      apiKey: fields[0] as String,
+      apiSecret: fields[1] as String,
     );
   }
 

@@ -37,13 +37,49 @@ class BybitAuthBloc extends HydratedBloc<BybitAuthEvent, BybitAuthState> {
 
   @override
   BybitAuthState? fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
+    try {
+      final stateType = json['type'] as String;
+
+      switch (stateType) {
+        case 'BybitAuthLoggedIn':
+          return BybitAuthLoggedIn(api: BybitApiEntity.fromJson(json['api']));
+        case 'BybitAuthError':
+          return BybitAuthError();
+        case 'BybitAuthLoading':
+          return BybitAuthLoading();
+        case 'BybitAuthLoggedOut':
+          return BybitAuthLoggedOut();
+        default:
+          return BybitAuthInitial();
+      }
+    } catch (_) {
+      return null;
+    }
   }
 
   @override
   Map<String, dynamic>? toJson(BybitAuthState state) {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    if (state is BybitAuthLoggedIn) {
+      return {
+        'type': 'BybitAuthLoggedIn',
+        'api': state.api.toJson(),
+      };
+    } else if (state is BybitAuthError) {
+      return {
+        'type': 'BybitAuthError',
+      };
+    } else if (state is BybitAuthLoading) {
+      return {
+        'type': 'BybitAuthLoading',
+      };
+    } else if (state is BybitAuthLoggedOut) {
+      return {
+        'type': 'BybitAuthLoggedOut',
+      };
+    } else {
+      return {
+        'type': 'BybitAuthInitial',
+      };
+    }
   }
 }

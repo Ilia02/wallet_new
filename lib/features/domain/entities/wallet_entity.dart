@@ -31,14 +31,3 @@ class LocalWallet extends WalletEntity with HiveObjectMixin {
   })  : coins = coins ?? [],
         super(nameWallet: nameWallet, coins: coins);
 }
-
-class BybitWallet extends WalletEntity {
-  final String nameWallet;
-  final List<WalletCoinEntity> coins;
-
-  BybitWallet({
-    required this.nameWallet,
-    List<WalletCoinEntity>? coins,
-  })  : coins = coins ?? [],
-        super(nameWallet: nameWallet, coins: coins);
-}

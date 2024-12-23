@@ -12,7 +12,7 @@ class BybitGetWalletUsecase
 
   @override
   Future<Either<Failure, AccountBybitEntity>> call(GetCoinParams params) async {
-    return await bybitRepository.getCoin(params.name);
+    return await bybitRepository.bybitGetWallet();
   }
 }
 

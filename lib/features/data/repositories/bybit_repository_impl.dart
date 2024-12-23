@@ -56,11 +56,20 @@ class BybitRepositoryImpl implements BybitRepository {
 
   @override
   Future<Either<Failure, AccountBybitEntity>> bybitGetWallet() async {
-    // TODO: implement bybitGetWallet
-    throw UnimplementedError();
+    try {
+      final api = _bybitApiBox.get('bybitApi');
+      if (api != null) {
+        final result = await bybitRemoteDatasource.bybitGetWallet(
+            api.apiKey, api.apiSecret);
+        return Right(result);
+      } else {
+        return Left(CacheFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
   }
 
-  // Проверяем, есть ли пользователь в кэше
   @override
   Future<Either<Failure, BybitApiEntity>> getByitApi() async {
     try {
@@ -74,12 +83,10 @@ class BybitRepositoryImpl implements BybitRepository {
     }
   }
 
-  // Кэшируем пользователя
   Future<void> _cacheByitApi(BybitApiEntity api) async {
     await _bybitApiBox.put('bybitApi', api);
   }
 
-  // Очищаем кэш
   Future<void> _clearCache() async {
     await _bybitApiBox.delete('bybitApi');
   }

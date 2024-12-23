@@ -11,7 +11,6 @@ import 'package:wallet_new/features/data/repositories/auth_repository_impl.dart'
 import 'package:wallet_new/features/data/repositories/bybit_repository_impl.dart';
 import 'package:wallet_new/features/domain/entities/bybit_api_entity.dart';
 import 'package:wallet_new/features/domain/entities/user_entity.dart';
-import 'package:wallet_new/features/domain/entities/wallet_coin_entity.dart';
 import 'package:wallet_new/features/domain/entities/wallet_entity.dart';
 import 'package:wallet_new/features/domain/repositories/auth_repository.dart';
 import 'package:wallet_new/features/domain/repositories/bybit_repository.dart';
@@ -22,6 +21,7 @@ import 'package:wallet_new/features/domain/usecases/auth_usecases/logout.dart';
 import 'package:wallet_new/features/domain/usecases/auth_usecases/register_with_email.dart';
 import 'package:wallet_new/features/domain/usecases/auth_usecases/reset_password.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_auth.dart';
+import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_get_wallet_usecase.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_logout.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/get_all_coins.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/get_coin.dart';
@@ -39,8 +39,11 @@ Future<void> init() async {
   //Hive
   await Hive.initFlutter();
   Hive.registerAdapter(UserEntityAdapter());
-  Hive.registerAdapter(WalletCoinEntityAdapter());
   Hive.registerAdapter(LocalWalletAdapter());
+  Hive.registerAdapter(BybitApiEntityAdapter());
+  var localWalletBox = await Hive.openBox<LocalWallet>('localWalletBox');
+  var bybitApiBox = await Hive.openBox<BybitApiEntity>('bybitApiBox');
+  var userEntityBox = await Hive.openBox<UserEntity>('userBox');
 
   //Bloc / Cubit
   sl.registerFactory(
@@ -77,6 +80,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetCoin(sl()));
   sl.registerLazySingleton(() => BybitAuth(sl()));
   sl.registerLazySingleton(() => BybitLogout(sl()));
+  sl.registerSingleton(() => BybitGetWalletUsecase(sl()));
 
   //Repository /Auth
   sl.registerLazySingleton<AuthRepository>(

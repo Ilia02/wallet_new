@@ -30,7 +30,7 @@ class CoinModel extends CoinEntity {
           volume24h: volume24h,
           usdIndexPrice: usdIndexPrice,
         );
-
+ 
   factory CoinModel.fromJson(Map<String, dynamic> json) {
     return CoinModel(
       symbol: json['symbol'],
