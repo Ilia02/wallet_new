@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:wallet_new/core/usecases/usecase.dart';
-import 'package:wallet_new/features/domain/entities/account_bybit_entities/account_bybit_entity.dart';
 import 'package:wallet_new/features/domain/entities/bybit_api_entity.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_auth.dart';
 import 'package:wallet_new/features/domain/usecases/bybit_usecases/bybit_logout.dart';
@@ -22,7 +21,6 @@ class BybitAuthBloc extends HydratedBloc<BybitAuthEvent, BybitAuthState> {
 
   Future<void> _onBybitSignInEvent(
       BybitSignInEvent event, Emitter<BybitAuthState> state) async {
-
     emit(BybitAuthLoading());
 
     final result = await bybitAuth(
