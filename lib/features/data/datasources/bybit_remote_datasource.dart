@@ -81,12 +81,13 @@ class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
 
     final response = await _makeRequest(apiCall, apiParams, apiKey, apiSecret);
 
-    final accountData = (response["result"] as List?);
+    final accountData = (response["result"]["id"]);
 
     if (accountData == null) {
       throw Exception('Error: Account not found');
     } else {
-      return accountData.first;
+      final api = BybitApiModel(apiKey: apiKey, apiSecret: apiSecret);
+      return api;
     }
   }
 
@@ -109,7 +110,7 @@ class BybitRemoteDatasourceImpl implements BybitRemoteDatasource {
         'X-BAPI-RECV-WINDOW': recvWindow,
       };
 
-      final response = await dio.get('$baseUrlDefault/$apiCall?$apiParams',
+      final response = await dio.get('$baseUrlDefault$apiCall?$apiParams',
           //queryParameters: params,
           options: Options(
             headers: headers,

@@ -33,6 +33,8 @@ class BybitAuthBloc extends HydratedBloc<BybitAuthEvent, BybitAuthState> {
   Future<void> _onBybitSignOutEvent(
       BybitSignOutEvent event, Emitter<BybitAuthState> state) async {
     final result = await bybitLogout(NoParams());
+
+    emit(BybitAuthInitial());
   }
 
   @override

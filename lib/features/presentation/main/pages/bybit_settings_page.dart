@@ -43,39 +43,53 @@ class _BybitSettingsPageState extends State<BybitSettingsPage> {
               ),
             ),
             const SizedBox(height: 24),
-            BlocBuilder<BybitAuthBloc, BybitAuthState>(
+            BlocListener<BybitAuthBloc, BybitAuthState>(
+              listener: (context, state) {
+                if (state is BybitAuthLoggedIn) {
+                  context.go("/settings");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Хорошо")),
+                  );
+                } else if (state is BybitAuthError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Ошибка")),
+                  );
+                }
+              },
+              child: BlocBuilder<BybitAuthBloc, BybitAuthState>(
                 builder: (context, state) {
-              if (state is BybitAuthInitial) {
-                return ElevatedButton(
-                  onPressed: () {
-                    // Логика сохранения ключей
-                    String apiKey = apiKeyController.text;
-                    String apiSecret = apiSecretController.text;
+                  if (state is BybitAuthInitial) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        String apiKey = apiKeyController.text;
+                        String apiSecret = apiSecretController.text;
 
-                    if (apiKey != "" && apiSecret != "") {
-                      print('API Key: $apiKey, API Secret: $apiSecret');
+                        if (apiKey.isNotEmpty && apiSecret.isNotEmpty) {
+                          print('API Key: $apiKey, API Secret: $apiSecret');
 
-                      context.read<BybitAuthBloc>().add(
-                            BybitSignInEvent(apiKey, apiSecret),
+                          context.read<BybitAuthBloc>().add(
+                                BybitSignInEvent(apiKey, apiSecret),
+                              );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Не заполнены данные")),
                           );
-                    } else {
-                      const SnackBar(content: Text("Не заполнены данные"));
-                    }
-                  },
-                  child: const Text("Сохранить"),
-                );
-              } else if (state is BybitAuthLoading) {
-                return ElevatedButton(
-                  onPressed: () {},
-                  child: const CircularProgressIndicator(),
-                );
-              } else if (state is BybitAuthLoggedIn) {
-                context.go("/settings");
-                return const SnackBar(content: Text("Хорошо"));
-              } else {
-                return const SnackBar(content: Text("Ошибка"));
-              }
-            }),
+                        }
+                      },
+                      child: const Text("Сохранить"),
+                    );
+                  } else if (state is BybitAuthLoading) {
+                    return ElevatedButton(
+                      onPressed: () {},
+                      child: const CircularProgressIndicator(),
+                    );
+                  } else {
+                    return const SizedBox.shrink(); // Возвращаем пустой виджет
+                  }
+                },
+              ),
+            )
           ],
         ),
       ),

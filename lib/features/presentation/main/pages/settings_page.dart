@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wallet_new/features/presentation/main/bloc/bybit/bybit_auth/bybit_auth_bloc.dart';
 import 'package:wallet_new/features/presentation/main/widgets/arrow_back_widget.dart';
 import 'package:wallet_new/features/presentation/main/widgets/bybit_settings_widget.dart';
 import 'package:wallet_new/features/presentation/main/widgets/toggle_theme_widget.dart';
@@ -25,7 +27,15 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             ToggleTheme(context),
             const SizedBox(height: 16),
-            BybitSettingsWidget(context),
+            BlocBuilder<BybitAuthBloc, BybitAuthState>(
+              builder: (context, state) {
+                if (state is BybitAuthLoggedIn) {
+                  return BybitSettingsWidget(context, loggedIn: true);
+                } else {
+                  return BybitSettingsWidget(context, loggedIn: false);
+                }
+              },
+            ),
           ],
         ),
       ),
