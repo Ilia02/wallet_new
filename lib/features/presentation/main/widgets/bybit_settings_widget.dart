@@ -35,7 +35,7 @@ class _BybitSettingsWidgetState extends State<BybitSettingsWidget> {
               subtitle: const Text('Настройки API ключей'),
               trailing: const Icon(Icons.arrow_forward),
               onTap: () {
-                context.go("/bybit");
+                context.go("/settings/bybit");
               },
             ),
           );

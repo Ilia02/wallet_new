@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wallet_new/features/presentation/main/models/nav_items_model.dart';
+import 'package:wallet_new/features/presentation/main/widgets/build_form_add_coin.dart';
 
 class NavBatWidget extends StatefulWidget {
   const NavBatWidget(BuildContext context, {super.key});
@@ -84,11 +85,16 @@ class _NavBatWidgetState extends State<NavBatWidget> {
                   ],
                 ),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AddCoinDialog(),
+                    );
+                  },
                   icon: const Icon(Icons.add),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

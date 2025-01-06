@@ -8,7 +8,7 @@ class NavItemsModel {
 }
 
 List<NavItemsModel> bottomNavItems = [
-  NavItemsModel(icon: const Icon(Icons.home), page: '/'),
+  NavItemsModel(icon: const Icon(Icons.home), page: '/home'),
   NavItemsModel(icon: const Icon(Icons.account_circle), page: '/profile'),
   NavItemsModel(icon: const Icon(Icons.settings), page: '/settings'),
 ];
